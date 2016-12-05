@@ -1,20 +1,26 @@
-let g:mapleader = "\<space>"
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" -------------------------------------------------
+"  Leader and shortcuts
+" -------------------------------------------------
+let g:mapleader = "\<space>"
 nnoremap <silent><leader>q :quit<cr>
 nnoremap <silent><leader>w :write<cr>
 
 inoremap jj <esc>
 
-" set the runtime path to include Vundle and initialize
+" -------------------------------------------------
+"  Vundle
+" -------------------------------------------------
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+" -------------------------------------------------
+"  Plugins
+" -------------------------------------------------
 Plugin 'tpope/vim-fugitive'
 Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -30,6 +36,28 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_root_markers = ['Gemfile', 'package.json']
 let g:ctrlp_working_path_mode = 'r'
 
+" -------------------------------------------------
+" Denite
+" -------------------------------------------------
+nnoremap <silent><leader>uu               :Denite -buffer-name=file_rec
+    \ file_rec<cr>
+nnoremap <silent><leader>um               :Denite -buffer-name=models
+    \ -path=`getcwd()`/app/models
+    \ file_rec<cr>
+nnoremap <silent><leader>uc               :Denite -buffer-name=controllers
+  \ -path=`getcwd()`/app/controllers
+  \ file_rec<cr>
+nnoremap <silent><leader>uv               :Denite -buffer-name=views
+  \ -path=`getcwd()`/app/views
+  \ file_rec<cr>
+nnoremap <silent><leader>uj               :Denite -buffer-name=javascripts
+  \ -path=`getcwd()`/app/assets/javascripts
+  \ file_rec<cr>
+nnoremap <silent><leader>us               :Denite -buffer-name=specs
+  \ -path=`getcwd()`/spec
+  \ file_rec<cr>
+nnoremap <silent><leader>ub               :Denite -buffer-name=buffers
+  \ buffer<cr>
 " ------------------------------------------------
 " The Silver Searcher
 " ------------------------------------------------
