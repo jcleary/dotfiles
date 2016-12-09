@@ -18,6 +18,7 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+
 " -------------------------------------------------
 "  Plugins
 " -------------------------------------------------
@@ -28,6 +29,12 @@ Plugin 'ascenator/L9', {'name': 'newL9'}
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-rails'
 Plugin 'Shougo/denite.nvim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 " -------------------------------------------------
 "  CtrlP
@@ -40,10 +47,10 @@ let g:ctrlp_working_path_mode = 'r'
 " Denite
 " -------------------------------------------------
 nnoremap <silent><leader>uu               :Denite -buffer-name=file_rec
-    \ file_rec<cr>
+  \ file_rec<cr>
 nnoremap <silent><leader>um               :Denite -buffer-name=models
-    \ -path=`getcwd()`/app/models
-    \ file_rec<cr>
+  \ -path=`getcwd()`/app/models
+  \ file_rec<cr>
 nnoremap <silent><leader>uc               :Denite -buffer-name=controllers
   \ -path=`getcwd()`/app/controllers
   \ file_rec<cr>
@@ -58,44 +65,26 @@ nnoremap <silent><leader>us               :Denite -buffer-name=specs
   \ file_rec<cr>
 nnoremap <silent><leader>ub               :Denite -buffer-name=buffers
   \ buffer<cr>
+
 " ------------------------------------------------
 " The Silver Searcher
 " ------------------------------------------------
- if executable('ag')
-   " Use ag over grep
-   set grepprg=ag\ --nogroup\ --nocolor
-
-   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
 endif
 
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-" nnoremap \ :Ag<SPACE>
+nnoremap \ :Ag<SPACE>
 
+" ------------------------------------------------
+" NERDtree
+" ------------------------------------------------
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+map <Leader>nf :NERDTreeFind<CR>
 
-
-
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 syntax on
 set number
