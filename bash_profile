@@ -10,6 +10,17 @@ alias c='clear'                             # c:            Clear terminal displ
 alias ll='ls -la'
 alias hg='history | grep '
 
+
+# -------------------------
+# EDITOR CONFIG etc
+# -------------------------
+alias v='vim .'
+vimf () {
+        local file
+        file=$(fzf --query="$1" --select-1 --exit-0 -m)
+        [ -n "$file" ] && vim -p "$file"
+}
+ 
 # ----------------------
 # GIT
 # ----------------------
@@ -18,7 +29,9 @@ alias gd='git diff'
 alias ga='git add'
 alias gc='git checkout'
 alias gb='git branch'
-
+alias gp='git pull'
+alias git='hub'
+alias pr='git pull-request -b develop'
 
 # ---------------------
 # DOCKER
