@@ -9,18 +9,18 @@ alias ~="cd ~"                              # ~:            Go Home
 alias c='clear'                             # c:            Clear terminal display
 alias ll='ls -la'
 alias hg='history | grep '
-
+alias fp='flight'
 
 # -------------------------
 # EDITOR CONFIG etc
 # -------------------------
 alias v='vim .'
 vimf () {
-        local file
-        file=$(fzf --query="$1" --select-1 --exit-0 -m)
-        [ -n "$file" ] && vim -p "$file"
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0 -m)
+  [ -n "$file" ] && vim -p "$file"
 }
- 
+
 # ----------------------
 # GIT
 # ----------------------
@@ -36,22 +36,62 @@ alias pr='git pull-request -b develop'
 # ---------------------
 # DOCKER
 # ---------------------
-alias denv='eval $(docker-machine env default)'
 alias dp='docker ps'
-alias dr='docker-machine restart default'
-alias dup='docker-compose up' 
+alias dup='docker stop $(docker ps -aq) && docker-compose up' 
+alias bup='docker stop $(docker ps -aq) && BYEBUG=1 docker-compose up' 
 alias dstop='docker-machine stop default'
 alias dstart='docker-machine start default && denv'
 alias dstatus='docker-machine status'
+dspec () {
+  echo "docker exec myrewards_myrewards.app_1 bash -c 'bin/rspec $1'"
+  docker exec myrewards_myrewards.app_1 bash -c 'bin/rspec $1'
+}
 
-# ---------------------
-# MYREWARDS/GPS
-# ---------------------
-alias app2='ssh jcleary@52.17.60.41'
-alias app3='ssh jcleary@52.31.178.218'
-alias app4='ssh jcleary@52.50.50.194'
-alias staging='ssh jcleary@54.76.255.30'
-alias gps='ssh jcleary@52.49.250.93'
+docker_compose_exec_when_up() {
+  local service="$1"; shift
+
+  wait_for_docker_compose_service "$service"
+  docker-compose exec "$service" "$@"
+}
+
+wait_for_docker_compose_service() {
+  local service="$1"; shift
+
+  until docker-compose ps "$service" 2> /dev/null | grep -i --silent "up"; do
+    sleep 1
+  done
+}
+
+dbash () {
+  echo "Running docker containers:"
+  containers=()
+  id=0
+  for fn in `docker ps --format="{{.Names}}" | sort`; do
+    containers[$id]=$fn
+    echo "  $id. $fn"
+    ((id++))
+  done
+  echo -n "bash : "
+  read container_id
+  docker exec -it ${containers[$container_id]} bash
+}
+
+dsh () {
+  echo "Running docker containers:"
+  containers=()
+  id=0
+  for fn in `docker ps --format="{{.Names}}" | sort`; do
+    containers[$id]=$fn
+    echo "  $id. $fn"
+    ((id++))
+  done
+  echo -n "bash : "
+  read container_id
+  docker exec -it ${containers[$container_id]} sh
+}
+
+
+
 
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
@@ -69,5 +109,6 @@ export EDITOR=/usr/bin/nano
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-if [ "`docker-machine status`" = "Running" ]; then denv; fi
+source ~/.logins
 export PATH="/usr/local/sbin:$PATH"
+
