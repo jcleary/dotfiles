@@ -48,7 +48,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'prettier/vim-prettier'
-Plugin 'w0rp/ale'
+Plugin 'dense-analysis/ale'
 Plugin 'mattn/emmet-vim'
 Plugin 'yssl/QFEnter'
  
